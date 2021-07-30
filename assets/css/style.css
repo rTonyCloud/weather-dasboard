@@ -1,0 +1,30 @@
+* {
+    box-sizing: border-box;
+  }
+
+:root
+
+/* color group */
+
+
+body {
+    background-image: url(https://images.unsplash.com/photo-1511667158582-e626b6e6bb48?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80);
+    background-size: cover;
+    font-family: 
+}
+
+#headweather {
+text-align: center;
+text-shadow: 1vh hsla(204, 64%, 44%, 1);
+
+background: hsla(204, 64%, 44%, 1);
+
+background: linear-gradient(90deg, hsla(204, 64%, 44%, 0.3) 0%, hsla(196, 93%, 70%, 1) 50%, hsla(0, 0%, 100%, 0.3) 100%);
+
+background: -moz-linear-gradient(90deg, hsla(204, 64%, 44%, 0.3) 0%, hsla(196, 93%, 70%, 1) 50%, hsla(0, 0%, 100%, 0.3) 100%);
+
+background: -webkit-linear-gradient(90deg, hsla(204, 64%, 44%, 0.3) 0%, hsla(196, 93%, 70%, 1) 50%, hsla(0, 0%, 100%, 0.3) 100%);
+
+filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#2980B9", endColorstr="#6DD5FA", GradientType=1 );
+}
+
