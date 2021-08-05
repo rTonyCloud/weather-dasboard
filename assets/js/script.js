@@ -52,7 +52,7 @@ function appendHistory(search) {
 
 
         // appending the forecast to the html page dynamically
-     let displayForecast() {
+     let displayForecast 
     
     // create a dom to generate the 5 days forecast on the div 
     // var div = document.createElement('div');
@@ -62,10 +62,10 @@ function appendHistory(search) {
     // dom create text (h5)
 
     // create a for loop that will rotate the weather based on city searches
-    for (let index = 5; index < displayForecast.length; index++) {
-        const element = array[index];
+    // for (let index = 5; index < displayForecast.length; index++) {
+    //     const element = array[index];
         
-    }
+    // }
 
 
 // integrating the api for two weather forecast 
