@@ -9,6 +9,7 @@ var apiKey = 'e76a8c755ca4d99e1a067cbf7bed9cc8'
  document.getElementById('wind')
  document.getElementById('humid')
  document.getElementById('uv')
+ document.getElementById('row')
 
 
 // create a bootstrap card in js - with same ID for 5 day forcaste
@@ -49,9 +50,23 @@ function appendHistory(search) {
     }
 
 
-    // create a dom to generate the days on the div 
-    // dom create element div
-    // dom create element 
+
+        // appending the forecast to the html page dynamically
+     let displayForecast() {
+    
+    // create a dom to generate the 5 days forecast on the div 
+    // var div = document.createElement('div');
+    // div.
+    // div.innerHTML = '';
+    // 
+    // dom create text (h5)
+
+    // create a for loop that will rotate the weather based on city searches
+    for (let index = 5; index < displayForecast.length; index++) {
+        const element = array[index];
+        
+    }
+
 
 // integrating the api for two weather forecast 
 
