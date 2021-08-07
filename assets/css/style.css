@@ -1,11 +1,14 @@
-html {
-    box-sizing: border-box;
-  }
+:root {
+  box-sizing: border-box;
+}
+
   *, *:before, *:after {
     box-sizing: inherit;
   }
 
-:root
+
+
+/* color group */
 
 /* color group */
 

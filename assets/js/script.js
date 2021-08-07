@@ -3,84 +3,101 @@ var searchHistory = []
 var apiKey = 'e76a8c755ca4d99e1a067cbf7bed9cc8'
 
 
- // create a bootstrap card in js - with same ID for weather results
+// create a bootstrap card in js - with same ID for weather results
 
- document.getElementById('temp')
- document.getElementById('wind')
- document.getElementById('humid')
- document.getElementById('uv')
- document.getElementById('row')
+document.getElementById('temp')
+document.getElementById('wind')
+document.getElementById('humid')
+document.getElementById('uv')
+document.getElementById('row')
 
 
 // create a bootstrap card in js - with same ID for 5 day forcaste
 document.getElementById('forecast cards')
+
+
+// // city elements, name and datte
+// var cityName = $()
+// var currentDate = $()
+// var weatherImg  = $()
+// var currentCountry = $()
 
 // dom elements
 var searchHistoryContainer = document.querySelector('#history')
 var searchInput = document.querySelector('#cityInput')
 
 
+
+// api functions starst here
+
+// fetching the api and city weather information
 function renderHistory() {
-    searchHistoryContainer.innerhtml=''
-    for (let index = searchHistory.length -1; index >= 0; i--) {
-            var btn = document.createElement('button')
-            btn.setAttribute('type', 'button')
-            btn.classList.add('history-btn', 'btn-history')
-            btn.setAttribute('data-search', searchHistory[i])
-            btn.textContent = searchHistory[i];
-            searchHistoryContainer.append('btn');
+    searchHistoryContainer.innerhtml = ''
+    for (let index = searchHistory.length - 1; index >= 0; i--) {
+        var btn = document.createElement('button')
+        btn.setAttribute('type', 'button')
+        btn.classList.add('history-btn', 'btn-history')
+        btn.setAttribute('data-search', searchHistory[i])
+        btn.textContent = searchHistory[i];
+        searchHistoryContainer.append('btn');
     }
 }
 
 function appendHistory(search) {
-    if (searchHistory.indexOf(search) != -1 ) {
+    if (searchHistory.indexOf(search) != -1) {
         return
     }
     searchHistory.push(search)
     localStorage.setItem('search-history', JSON.stringify(searchHistory));
     renderHistory();
 }
-    function initiateSearchHistory(){
-        let storeHistory = localStorage.getItem('search-history')
-        if (storeHistory) {
-            searchHistory = JSON.parse(storeHistory)    
-        }
-        
-        renderHistory()
+
+function initiateSearchHistory() {
+    let storeHistory = localStorage.getItem('search-history')
+    if (storeHistory) {
+        searchHistory = JSON.parse(storeHistory)
     }
 
+    renderHistory()
+}
+
+// 
 
 
-        // appending the forecast to the html page dynamically
-     let displayForecast 
+
+// appending the forecast to the html prowage dynamically  
+let displayForecast = $("<div class='col-1 border border-primary' id='temp wind humidity uvIndex' style='width: 14rem; height: 14rem'>" +2+2+" </div>")
+let displayForecast2 = $("<div class='col-1 border border-primary' id='temp wind humidity uvIndex' style='width: 14rem; height: 14rem'>" +2+2+" </div>")
+let displayForecast3 = $("<div class='col-1 border border-primary' id='temp wind humidity uvIndex' style='width: 14rem; height: 14rem'>" +2+2+" </div>")
+let displayForecast4 = $("<div class='col-1 border border-primary' id='temp wind humidity uvIndex'  style='width: 14rem; height: 14rem'>" +2+2+" </div>")
+let displayForecast5 = $("<div class='col-1 border border-primary' id='temp wind humidity uvIndex' style='width: 14rem; height: 14rem'>" +2+2+" </div>")
+
+let fiveDayForecast = [];
+
+fiveDayForecast.push(displayForecast);
+fiveDayForecast.push(displayForecast2);
+fiveDayForecast.push(displayForecast3);
+fiveDayForecast.push(displayForecast4);
+fiveDayForecast.push(displayForecast5);
+
+fiveDayForecast.forEach( foreCastCard => {$('#cardfc').append(foreCastCard) ;
     
-    // create a dom to generate the 5 days forecast on the div 
-    // var div = document.createElement('div');
-    // div.
-    // div.innerHTML = '';
-    // 
-    // dom create text (h5)
+});
 
-    // create a for loop that will rotate the weather based on city searches
-    // for (let index = 5; index < displayForecast.length; index++) {
-    //     const element = array[index];
-        
-    // }
 
 
 // integrating the api for two weather forecast 
 
 // one call api 
-fetch('http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=e76a8c755ca4d99e1a067cbf7bed9cc8')     
-.then(response => response.json())
-.then(data => console.log(data))
+fetch('https://api.openweathermap.org/data/2.5/onecall?lat=${latCurrent}&lon=${lonCurrent}&appid=e76a8c755ca4d99e1a067cbf7bed9cc8')
+    .then(response => response.json())
+    .then(data => console.log(data))
 
 
 // geosearch api for cities
-$('.search-city').on('click', function() {
-   var cityInput = $('.cityInput').val()
-   fetch('https://api.openweathermap.org/data/2.5/weather?q='+cityInput+'&appid=e76a8c755ca4d99e1a067cbf7bed9cc8')
-    .then(response => response.json())
-    .then(data => console.log(data))
+$('.search-city').on('click', function () {
+    var cityInput = $('#cityInput').val()
+    fetch('https://api.openweathermap.org/data/2.5/weather?q=' + cityInput + '&appid=e76a8c755ca4d99e1a067cbf7bed9cc8')
+        .then(response => response.json())
+        .then(data => console.log(data))
 })
-
