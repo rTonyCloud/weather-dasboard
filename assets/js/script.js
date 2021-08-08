@@ -96,7 +96,7 @@ $('.search-city').on('click', function () {
                 .then(response => response.json())
                 .then(data => {
                     var longitude = data.coord.lon;
-                    console.log(data)
+                    // console.log(data)
                     console.log(data.name);
                     var latitude = data.coord.lat;
 
@@ -104,8 +104,9 @@ $('.search-city').on('click', function () {
                     fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=e76a8c755ca4d99e1a067cbf7bed9cc8`)
                         .then(response => response.json())
                         .then(data => {
-                            var calcTemp = Math.round(((parseInt(.temp) - 273.15) * 9) / 5 + 32);
+                            var calcTemp = Math.round(((parseInt(data.current.temp) - 273.15) * 9) / 5 + 32);
                             $('#temp').text(calcTemp)
+                            
                             console.log(data);
                             
 
