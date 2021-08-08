@@ -66,11 +66,11 @@ function initiateSearchHistory() {
 
 
 // appending the forecast to the html prowage dynamically  
-let displayForecast = $("<div class='col-1 border border-primary' id='temp wind humidity uvIndex' style='width: 14rem; height: 14rem'>" +2+2+" </div>")
-let displayForecast2 = $("<div class='col-1 border border-primary' id='temp wind humidity uvIndex' style='width: 14rem; height: 14rem'>" +2+2+" </div>")
-let displayForecast3 = $("<div class='col-1 border border-primary' id='temp wind humidity uvIndex' style='width: 14rem; height: 14rem'>" +2+2+" </div>")
-let displayForecast4 = $("<div class='col-1 border border-primary' id='temp wind humidity uvIndex'  style='width: 14rem; height: 14rem'>" +2+2+" </div>")
-let displayForecast5 = $("<div class='col-1 border border-primary' id='temp wind humidity uvIndex' style='width: 14rem; height: 14rem'>" +2+2+" </div>")
+let displayForecast = $("<div class= 'col-1 border border-primary temp wind humidity uvIndex' 'style='width: 14rem; height: 14rem'>" + 2 + 2 + "</div>")
+let displayForecast2 = $("<div class='col-1 border border-primary temp wind humidity uvIndex' 'style='width: 14rem; height: 14rem'>" + 2 + 2 + "</div>")
+let displayForecast3 = $("<div class='col-1 border border-primary temp wind humidity uvIndex' 'style='width: 14rem; height: 14rem'>" + 2 + 2 + "</div>")
+let displayForecast4 = $("<div class='col-1 border border-primary temp wind humidity uvIndex' 'style='width: 14rem; height: 14rem'>" + 2 + 2 + "</div>")
+let displayForecast5 = $("<div class='col-1 border border-primary temp wind humidity uvIndex' 'style='width: 14rem; height: 14rem'>" + 2 + 2 + "</div>")
 
 let fiveDayForecast = [];
 
@@ -80,24 +80,40 @@ fiveDayForecast.push(displayForecast3);
 fiveDayForecast.push(displayForecast4);
 fiveDayForecast.push(displayForecast5);
 
-fiveDayForecast.forEach( foreCastCard => {$('#cardfc').append(foreCastCard) ;
-    
+fiveDayForecast.forEach(foreCastCard => {
+    $('#cardfc').append(foreCastCard);
+
 });
 
 
 
 // integrating the api for two weather forecast 
 
-// one call api 
-fetch('https://api.openweathermap.org/data/2.5/onecall?lat=${latCurrent}&lon=${lonCurrent}&appid=e76a8c755ca4d99e1a067cbf7bed9cc8')
-    .then(response => response.json())
-    .then(data => console.log(data))
-
-
 // geosearch api for cities
 $('.search-city').on('click', function () {
-    var cityInput = $('#cityInput').val()
-    fetch('https://api.openweathermap.org/data/2.5/weather?q=' + cityInput + '&appid=e76a8c755ca4d99e1a067cbf7bed9cc8')
-        .then(response => response.json())
-        .then(data => console.log(data))
-})
+            var cityInput = $('#cityInput').val()
+            fetch('https://api.openweathermap.org/data/2.5/weather?q=' + cityInput + '&appid=e76a8c755ca4d99e1a067cbf7bed9cc8')
+                .then(response => response.json())
+                .then(data => {
+                    var longitude = data.coord.lon;
+                    console.log(data)
+                    console.log(data.name);
+                    var latitude = data.coord.lat;
+
+                    console.log(latitude)
+                    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=e76a8c755ca4d99e1a067cbf7bed9cc8`)
+                        .then(response => response.json())
+                        .then(data => {
+                            var calcTemp = Math.round(((parseInt(.temp) - 273.15) * 9) / 5 + 32);
+                            $('#temp').text(calcTemp)
+                            console.log(data);
+                            
+
+                        })
+                })
+            });
+
+            // one call api 
+            // fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latCurrent}&lon=${lonCurrent}&appid=e76a8c755ca4d99e1a067cbf7bed9cc8`)
+            //     .then(response => response.json())
+            //     .then(data => console.log(data))
