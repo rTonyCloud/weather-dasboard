@@ -7,7 +7,7 @@
 * Javascript / DOM
 
 ## Website
-https://rTonycloud.github.io/weather-dasboard
+https://rTonycloud.github.io/weather-dashboard
 
 [image](https://user-images.githubusercontent.com/85594926/129451820-94d94d26-82da-494d-a838-b9fcdbd402c7.png))
 
