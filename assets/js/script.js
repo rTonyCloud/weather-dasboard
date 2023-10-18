@@ -1,130 +1,133 @@
-// global variable
-var searchHistory = []
-var apiKey = 'e76a8c755ca4d99e1a067cbf7bed9cc8'
+// Global variables
+const searchHistory = [];
+const apiKey = 'e76a8c755ca4d99e1a067cbf7bed9cc8';
 
+// DOM elements
+const searchHistoryContainer = $('#history');
+const searchInput = $('#cityInput');
 
-// create a bootstrap card in js - with same ID for weather results
-
-document.getElementById('temp')
-document.getElementById('wind')
-document.getElementById('humid')
-document.getElementById('uv')
-document.getElementById('row')
-
-
-// create a bootstrap card in js - with same ID for 5 day forcaste
-document.getElementById('forecast cards')
-
-
-// // city elements, name and datte
-// var cityName = $(cityName)
-// var currentDate = $()
-// var weatherImg  = $()
-// var countryName = $()
-
-// dom elements
-var searchHistoryContainer = document.querySelector('#history')
-var searchInput = document.querySelector('#cityInput')
-
-
-
-
-
-// fetching the api and city weather information
+// Function to render search history
 function renderHistory() {
-    searchHistoryContainer.innerHTML = ''
-    for (let index = searchHistory.length - 1; index >= 0; i--) {
-        var btn = document.createElement('button')
-        btn.setAttribute('type', 'button')
-        btn.classList.add('history-btn', 'btn-history')
-        btn.setAttribute('data-search', searchHistory[i])
-        btn.textContent = searchHistory[i];
-        searchHistoryContainer.append('btn');
-    }
-    console.log("searchHistory", searchHistory)
+  searchHistoryContainer.empty();
+  for (let i = searchHistory.length - 1; i >= 0; i--) {
+    const btn = $('<button>')
+      .attr('type', 'button')
+      .addClass('history-btn btn-history')
+      .attr('data-search', searchHistory[i])
+      .text(searchHistory[i]);
+    searchHistoryContainer.append(btn);
+  }
 }
 
+// Function to append a search to the history
 function appendHistory(search) {
-    if (searchHistory.indexOf(search) != -1) {
-        return
-    }
-    searchHistory.push(search)
+  if (!searchHistory.includes(search)) {
+    searchHistory.push(search);
     localStorage.setItem('search-history', JSON.stringify(searchHistory));
     renderHistory();
+    console.log('Search history updated', searchHistory);
+  }
 }
 
+// Function to initiate search history
 function initiateSearchHistory() {
-    let storeHistory = localStorage.getItem('search-history')
-    if (storeHistory) {
-        searchHistory = JSON.parse(storeHistory)
-    }
-
-    renderHistory()
+  const storedHistory = localStorage.getItem('search-history');
+  if (storedHistory) {
+    searchHistory.push(...JSON.parse(storedHistory));
+    renderHistory();
+    console.log('Search history loaded from local storage', searchHistory);
+  }
 }
 
-// 
+// Function to fetch weather data and update the UI
+function fetchWeather(cityInput) {
+  // Display loading message or spinner to indicate that data is being fetched
+  // Example: $('#loadingMessage').show();
 
+  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityInput}&appid=${apiKey}`)
+    .then((response) => response.json())
+    .then((data) => {
+      // Extract relevant data and update the UI
+      updateUI(data);
+    })
+    .catch((error) => {
+      console.error('Error fetching weather data:', error);
+      // Display an error message to the user
+    });
+}
 
+// Function to update the UI with weather data
+function updateUI(data) {
+  // Extract and display data
+  const longitude = data.coord.lon;
+  const latitude = data.coord.lat;
+  const cityName = data.name;
+  $('#cityCurrent').text(cityName);
+  const countryName = data.sys.country;
+  $('#country').text(`, ${countryName}`);
+  const dateCurrent = data.dt;
+  $('#time').text(`, ${dateCurrent}`);
 
-// appending the forecast to the html prowage dynamically  
-// let displayForecast1 = $("<div class='col-1 border border-primary' id='dayOne'> <p id='temp'>temperature</p>")
+  fetch(
+    `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${apiKey}`
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      const inpTemp = Math.round(((parseInt(data.current.temp) - 273.15) * 9) / 5 + 32);
+      $('#temp').text(inpTemp);
 
+      const inpWind = Math.round(parseInt(data.current.wind_speed));
+      $('#wind').text(inpWind);
 
+      const inpHumid = Math.round(parseInt(data.current.humidity));
+      $('#humid').text(inpHumid);
 
+      const inpUVI = Math.round(parseInt(data.current.uvi));
+      $('#uvIndex').text(inpUVI);
+    })
+    .catch((error) => {
+      console.error('Error fetching one-call API:', error);
+      // Display an error message to the user
+    });
+}
 
-// integrating the api for two weather forecast 
+function renderHistory() {
+  // Clear the previous history
+  $('#search').empty();
+  for (let i = searchHistory.length - 1; i >= 0; i--) {
+    const btn = $('<button>')
+      .attr('type', 'button')
+      .addClass('history-btn btn-history')
+      .attr('data-search', searchHistory[i])
+      .text(searchHistory[i]);
+    $('#search').append(btn);
+  }
+}
 
-// geosearch api for cities
+// Event listener for the search button
 $('.search').on('click', function () {
-            var cityInput = $('#cityInput').val()
-            fetch('https://api.openweathermap.org/data/2.5/weather?q=' + cityInput + '&appid=e76a8c755ca4d99e1a067cbf7bed9cc8')
-                .then(response => response.json())
-                .then(data => {
-                    // longitude here
-                    let longitude = data.coord.lon;
-                    // console.log(data)
-                    console.log(data.name);
-                    // latitude code below
-                    let latitude = data.coord.lat;
+  const cityInput = searchInput.val();
+  fetchWeather(cityInput);
 
-                    // city's name 
-                    let cityName = data.name;
-                    $('#cityCurrent').text(cityName)
-                    console.log(data.name)
-                    // country's name when user search
-                    let countryName =  data.sys.country;
-                    $('#country').text(`, ${countryName}`)
-                    console.log(data.country)
-                    // current date and time when user searches for individual cities.
-                    let dateCurrent =  data.dt
-                    $('#time').text(`, ${dateCurrent}`)
-                    console.log(data.dt)
+  // Append the search term to the history
+  appendHistory(cityInput);
+});
 
-                    console.log(latitude)
-                    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=e76a8c755ca4d99e1a067cbf7bed9cc8`)
-                        .then(response => response.json())
-                        .then(data => {
-                            let inpTemp= Math.round(((parseInt(data.current.temp) - 273.15) * 9) / 5 + 32);
-                            $('#temp').text(inpTemp)
-                            
-                            let inpWind = Math.round(((parseInt(data.current.wind_speed))));
-                            $('#wind').text(inpWind)
+// Event listener for the search button
+$('.search').on('click', function () {
+  const cityInput = searchInput.val();
+  fetchWeather(cityInput);
 
-                            let inpHumid = Math.round(((parseInt(data.current.humidity))));
-                            $('#humid').text(inpHumid)
+  // Append the search term to the history
+  appendHistory(cityInput);
+});
 
-                            let inpUVI = Math.round(((parseInt(data.current.uvi))));
-                            $('#uvIndex').text(inpUVI)
-                            console.log(data);
-                            
+// Event listener for history buttons
+searchHistoryContainer.on('click', '.history-btn', function () {
+  const cityInput = $(this).data('search');
+  searchInput.val(cityInput);
+  fetchWeather(cityInput);
+});
 
-                        })
-
-                        // Dynamically create 
-                })
-            });
-
-            // one call api 
-            // fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${latCurrent}&lon=${lonCurrent}&appid=e76a8c755ca4d99e1a067cbf7bed9cc8`)
-            //     .then(response => response.json())
-            //     .then(data => console.log(data))
+// Initialize search history
+initiateSearchHistory();
